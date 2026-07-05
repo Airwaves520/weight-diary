@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>体重日记 2.0</title>
+    <meta name="theme-color" content="#16785f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="体重日记">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Fitness Log Pro</p>
+          <h1 id="page-title">体重日记</h1>
+        </div>
+        <div class="top-actions">
+          <button class="vip-button" id="vipStatus" type="button">关于 / 赞助作者</button>
+          <div class="month-control">
+            <button class="icon-button" id="prevMonth" type="button" aria-label="上个月" title="上个月">‹</button>
+            <input id="monthPicker" type="month" aria-label="选择月份">
+            <button class="icon-button" id="nextMonth" type="button" aria-label="下个月" title="下个月">›</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="本月概览">
+        <article class="stat-card">
+          <span>本月记录</span>
+          <strong id="statCount">0 天</strong>
+        </article>
+        <article class="stat-card">
+          <span>平均体重</span>
+          <strong id="statAverage">-- kg</strong>
+        </article>
+        <article class="stat-card">
+          <span>月内变化</span>
+          <strong id="statChange">-- kg</strong>
+        </article>
+        <article class="stat-card">
+          <span>最新记录</span>
+          <strong id="statLatest">--</strong>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <form class="entry-panel" id="entryForm">
+          <div class="panel-heading">
+            <h2>记录今天</h2>
+            <button class="secondary-button" id="todayButton" type="button">今天</button>
+          </div>
+
+          <label>
+            日期
+            <input id="entryDate" type="date" required>
+          </label>
+
+          <label>
+            体重 / kg
+            <input id="entryWeight" type="number" min="20" max="300" step="0.1" inputmode="decimal" placeholder="例如 72.4" required>
+          </label>
+
+          <label>
+            日记
+            <textarea id="entryNote" rows="6" placeholder="训练、饮食、睡眠、状态..."></textarea>
+          </label>
+
+          <div class="target-box">
+            <label>
+              目标体重 / kg
+              <input id="targetWeight" type="number" min="20" max="300" step="0.1" inputmode="decimal" placeholder="例如 65.0">
+            </label>
+            <button class="secondary-button" id="saveTarget" type="button">设置</button>
+          </div>
+
+          <div class="form-actions">
+            <button class="primary-button" type="submit">保存记录</button>
+            <button class="ghost-button" id="clearForm" type="button">清空</button>
+          </div>
+        </form>
+
+        <section class="chart-panel" aria-labelledby="chart-title">
+          <div class="panel-heading chart-heading">
+            <h2 id="chart-title">趋势图</h2>
+            <div class="segmented-control" aria-label="趋势范围">
+              <button class="segment is-active" id="monthlyTrend" type="button">本月趋势</button>
+              <button class="segment" id="allTrend" type="button">全部历史</button>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="weightChart" width="900" height="440" aria-label="体重折线图"></canvas>
+            <div class="empty-state" id="emptyChart">当前范围还没有记录</div>
+          </div>
+          <div class="chart-meta">
+            <div class="legend">
+              <span class="legend-dot"></span>
+              <span>体重</span>
+            </div>
+            <div class="legend target-legend" id="targetLegend">
+              <span class="legend-line"></span>
+              <span>目标体重</span>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="records-panel" aria-labelledby="records-title">
+        <div class="panel-heading">
+          <h2 id="records-title">本月日记</h2>
+          <div class="data-actions">
+            <button class="secondary-button" id="exportData" type="button">导出</button>
+            <button class="secondary-button pro-action" id="exportCsv" type="button">导出 CSV</button>
+            <label class="secondary-button file-button">
+              导入
+              <input id="importData" type="file" accept="application/json">
+            </label>
+          </div>
+        </div>
+        <div class="records-list" id="recordsList"></div>
+      </section>
+    </main>
+
+    <dialog class="vip-dialog sponsor-dialog" id="vipDialog">
+      <form method="dialog" class="vip-modal">
+        <button class="close-button" value="cancel" aria-label="关闭">×</button>
+        <p class="eyebrow">Weight Diary</p>
+        <div class="cashier-grid">
+          <section class="vip-info">
+            <h2 id="vipDialogTitle">关于《体重日记》与独立开发</h2>
+            <p class="vip-copy" id="vipDialogCopy">
+              《体重日记》会一直免费使用。它是一款纯本地存储的独立个人作品，没有任何云端服务器，也绝不上传您的任何体重与健康数据。
+            </p>
+            <p class="vip-copy">
+              如果它刚好帮你省了一点时间、少走了一点弯路，或者在某个瞬间让你觉得“还挺好用”，那我就已经很开心了。
+            </p>
+            <p class="vip-copy">
+              赞助不是购买功能，也不会影响任何使用权限，只是给这个小项目一点继续维护下去的动力。愿意支持的话，就当请我喝杯水；不赞助也完全没关系，能继续使用它、把它推荐给需要的人，对我来说也已经是很大的支持。
+            </p>
+            <p class="vip-copy">
+              谢谢你愿意使用它。
+            </p>
+            <p class="activate-message" id="activateMessage"></p>
+          </section>
+
+          <section class="cashier-panel" aria-label="赞助二维码">
+            <div class="pay-tabs" role="tablist" aria-label="赞助方式">
+              <button class="pay-tab is-active" id="wechatPayTab" type="button">微信赞助</button>
+              <button class="pay-tab" id="alipayTab" type="button">支付宝赞助</button>
+            </div>
+            <div class="qr-frame">
+              <img id="payQrImage" src="wechat_pay.png" alt="微信赞助二维码">
+            </div>
+            <button class="secondary-button save-qr-button is-hidden" id="saveQrButton" type="button">保存二维码到相册</button>
+            <p class="price-note" id="payHintText">赞助完全自愿，不是购买功能，也不会影响任何使用权限。</p>
+          </section>
+        </div>
+      </form>
+    </dialog>
+
+    <template id="recordTemplate">
+      <article class="record-item">
+        <button class="record-main" type="button">
+          <time></time>
+          <strong></strong>
+          <p></p>
+        </button>
+        <button class="delete-button" type="button" aria-label="删除记录" title="删除">×</button>
+      </article>
+    </template>
+
+    <script src="storage.js"></script>
+    <script src="chart.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

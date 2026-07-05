@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+out/
+build/
+.gradle/
+android-project-2.0/android/app/build/
+
+# Local release files are uploaded to GitHub Releases, not committed to git.
+release-assets/*.zip
+release-assets/*.apk
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/

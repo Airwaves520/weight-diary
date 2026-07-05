@@ -1,0 +1,10 @@
+{
+  "name": "体重日记 2.0",
+  "short_name": "体重日记",
+  "description": "记录健身日常体重，并按月份或全部历史查看趋势。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f7f5",
+  "theme_color": "#16785f",
+  "lang": "zh-CN"
+}
