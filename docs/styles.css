@@ -208,7 +208,7 @@ h1 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   width: min(1120px, calc(100% - 32px));
-  margin: -36px auto 0;
+  margin: 24px auto 0;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -218,7 +218,7 @@ h1 {
 
 .trust-band div {
   min-height: 112px;
-  padding: 22px;
+  padding: 26px 22px 22px;
   background: rgba(255, 255, 255, 0.94);
 }
 
